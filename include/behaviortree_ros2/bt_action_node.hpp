@@ -412,13 +412,16 @@ namespace BT
   template <class T>
   inline void RosActionNode<T>::cancelGoal()
   {
-    auto future_cancel = action_client_->async_cancel_goal(goal_handle_);
-
-    if (callback_group_executor_.spin_until_future_complete(future_cancel, server_timeout_) !=
-        rclcpp::FutureReturnCode::SUCCESS)
+    if (goal_handle_ != nullptr) // to avoid goal_handle_ being canceled twice
     {
-      RCLCPP_ERROR(node_->get_logger(), "Failed to cancel action server for [%s]",
-                   prev_action_name_.c_str());
+      auto future_cancel = action_client_->async_cancel_goal(goal_handle_);
+
+      if (callback_group_executor_.spin_until_future_complete(future_cancel, server_timeout_) !=
+          rclcpp::FutureReturnCode::SUCCESS)
+      {
+        RCLCPP_ERROR(node_->get_logger(), "Failed to cancel action server for [%s]",
+                     prev_action_name_.c_str());
+      }
     }
   }
 
