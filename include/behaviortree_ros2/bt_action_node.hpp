@@ -352,14 +352,16 @@ namespace BT
         auto ret = callback_group_executor_.spin_until_future_complete(future_goal_handle_, nodelay);
         if (ret != rclcpp::FutureReturnCode::SUCCESS)
         {
-          if ((node_->now() - time_goal_sent_) > timeout)
-          {
-            return CheckStatus(onFailure(SEND_GOAL_TIMEOUT));
-          }
-          else
-          {
-            return NodeStatus::RUNNING;
-          }
+          // EDITED by DAVID
+          // if ((node_->now() - time_goal_sent_) > timeout)
+          // {
+          //   return CheckStatus(onFailure(SEND_GOAL_TIMEOUT));
+          // }
+          // else
+          // {
+          //   return NodeStatus::RUNNING;
+          // }
+          return NodeStatus::RUNNING;
         }
         else
         {
@@ -422,6 +424,10 @@ namespace BT
         RCLCPP_ERROR(node_->get_logger(), "Failed to cancel action server for [%s]",
                      prev_action_name_.c_str());
       }
+    }
+    else
+    {
+      action_client_->async_cancel_all_goals();
     }
   }
 
