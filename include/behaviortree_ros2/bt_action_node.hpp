@@ -145,6 +145,8 @@ namespace BT
     /// Method used to send a request to the Action server to cancel the current goal
     void cancelGoal();
 
+    void asyncCancelGoal();
+
   protected:
     std::shared_ptr<rclcpp::Node> node_;
     std::string prev_action_name_;
@@ -413,6 +415,22 @@ namespace BT
 
   template <class T>
   inline void RosActionNode<T>::cancelGoal()
+  {
+    if (goal_handle_ != nullptr) // to avoid goal_handle_ being canceled twice
+    {
+      auto future_cancel = action_client_->async_cancel_goal(goal_handle_);
+
+      if (callback_group_executor_.spin_until_future_complete(future_cancel, server_timeout_) !=
+          rclcpp::FutureReturnCode::SUCCESS)
+      {
+        RCLCPP_ERROR(node_->get_logger(), "Failed to cancel action server for [%s]",
+                     prev_action_name_.c_str());
+      }
+    }
+  }
+
+  template <class T>
+  inline void RosActionNode<T>::asyncCancelGoal()
   {
     if (goal_handle_ != nullptr) // to avoid goal_handle_ being canceled twice
     {
