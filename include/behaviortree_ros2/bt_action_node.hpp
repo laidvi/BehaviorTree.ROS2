@@ -152,6 +152,7 @@ namespace BT
     std::string prev_action_name_;
     bool action_name_may_change_ = false;
     const std::chrono::milliseconds server_timeout_;
+    bool found_server_ = false; // added by David to expose the result of client creation
 
   private:
     ActionClientPtr action_client_;
@@ -251,6 +252,7 @@ namespace BT
       RCLCPP_ERROR(node_->get_logger(), "%s: Action server with name '%s' is not reachable.",
                    name().c_str(), prev_action_name_.c_str());
     }
+    found_server_ = found;
     return found;
   }
 
