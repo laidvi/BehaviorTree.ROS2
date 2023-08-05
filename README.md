@@ -1,4 +1,12 @@
-# BehaviorTree.ROS2
+# BehaviorTree.ROS2 (forked by David Lai)
+
+This repository is a forked version by David Lai. Changes made in the source code include:
+1. bt_topic_sub_node:
+    - use RosNodeParams.server_timeout as the sleep duration before the executor spins to receive subscription to avoid failure when ticking the node for the first time.
+2. bt_action_node:
+    - added a nullptr checking for goal_handle_ before canceling the goal in cancelGoal()
+    - added asyncCancelGoal() public function to allow async_cancel_all_goals()
+    - temporarily disable oal request timeout check
 
 This repository contains useful wrappers to use ROS2 and BehaviorTree.CPP together.
 
@@ -17,7 +25,7 @@ Our main goals are:
 Note that this library is compatible **only** with:
 
 - **BT.CPP** 4.1 or older.
-- **ROS** Galactic or older.
+- **ROS** Humble or older.
 
 Additionally, check **plugins.hpp** to see how to learn how to
 wrap your Nodes into plugins that can be loaded at run-time.
