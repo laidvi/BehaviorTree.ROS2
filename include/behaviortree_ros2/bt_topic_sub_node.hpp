@@ -225,7 +225,18 @@ namespace BT
     };
 
     // Added by David to allow the subscription to be captured - server_timeout is the period of a publishing cycle
-    std::this_thread::sleep_for(sleep_ms_);
+    
+    std::chrono::duration<int,std::milli> duration(sleep_ms_);
+    auto deadline_ = std::chrono::steady_clock::now() + rclcpp::Duration(duration).to_chrono<std::chrono::nanoseconds>();
+    auto current_point = std::chrono::steady_clock::now();
+    while (true)
+    {
+      auto time_left = std::chrono::duration_cast<std::chrono::nanoseconds>(deadline_ - current_point).count();
+      if (time_left < 0)
+      {
+        break;
+      }
+    }
 
     callback_group_executor_.spin_some();
     auto status = CheckStatus(onTick(last_msg_));
