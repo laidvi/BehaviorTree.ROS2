@@ -86,9 +86,10 @@ install(
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin)
-  
-install(DIRECTORY include/ DESTINATION include/${PROJECT_NAME})
-  
+
+## To install under include folder instead of include/${PROJECT_NAME}
+install(DIRECTORY include/ DESTINATION include)
+# install(DIRECTORY include/ DESTINATION include/${PROJECT_NAME})
 
 ament_export_include_directories(include)
 
