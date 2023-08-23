@@ -33,8 +33,12 @@ function(add_target_dependencies target)
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
     ament_target_dependencies(${target} ${THIS_PACKAGE_INCLUDE_DEPENDS})
 
+    ## Humble
     rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}_SLEEP" "rosidl_typesupport_cpp")
     target_link_libraries(${target} "${cpp_typesupport_target}")
+
+    ## Galactic
+    # rosidl_target_interfaces(${target} "${PROJECT_NAME}_SLEEP" "rosidl_typesupport_cpp")
 endfunction()
 
 ######################################################

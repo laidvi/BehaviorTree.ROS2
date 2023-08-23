@@ -229,13 +229,8 @@ namespace BT
     std::chrono::duration<int,std::milli> duration(sleep_ms_);
     auto deadline_ = std::chrono::steady_clock::now() + rclcpp::Duration(duration).to_chrono<std::chrono::nanoseconds>();
     auto current_point = std::chrono::steady_clock::now();
-    while (true)
+    while (std::chrono::duration_cast<std::chrono::nanoseconds>(deadline_ - current_point).count() > 0)
     {
-      auto time_left = std::chrono::duration_cast<std::chrono::nanoseconds>(deadline_ - current_point).count();
-      if (time_left < 0)
-      {
-        break;
-      }
     }
 
     callback_group_executor_.spin_some();
