@@ -264,7 +264,8 @@ template<class T> inline
       return CheckStatus( onFailure(INVALID_REQUEST) );
     }
 
-    future_response_ = service_client_->async_send_request(request).share();
+    future_response_ = service_client_->async_send_request(request); // for galactic
+    // future_response_ = service_client_->async_send_request(request).share(); // for humble
     time_request_sent_ = node_->now();
 
     return NodeStatus::RUNNING;
